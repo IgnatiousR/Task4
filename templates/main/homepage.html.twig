@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}HomePage{% endblock %}
+
+{% block body %}
+<div class="mt-10">
+    <h1 class="text-6xl tracking-tighter font-bold">Homepage</h1>
+</div>
+
+<div class="mt-10">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+        <div class="p-4 sm:p-8 space-y-4">
+            <div class="p-4 sm:p-8 bg-white shadow rounded-lg">
+                <div class="max-w-xl">
+                    <a class="text-3xl block tracking-tighter text-gray-600 font-medium ml-2 hover:underline hover:text-gray-500" 
+                    href="{{ path('app_user_all') }}">View User Table</a>
+                </div>
+            </div>
+      </div>
+    </div>
+</div>
+<div class="my-14 flex flex-col">
+		<div class="text-center">
+			<p class="text-gray-500"></p>
+			<p class="italic text-sm">by Ignatious Rozario</p>
+
+			{# <h1 class="mb-10 text-6xl font-bold tracking-tighter mt-5">Post title</h1> #}
+		</div>
+
+		{# <p class="text-gray-500 mt-10 leading-8">
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet blanditiis totam repudiandae, eligendi aut dignissimos aspernatur repellat at voluptate veritatis.
+		</p> #}
+
+	</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile Edit{% endblock %}
+{% block body %}
+<div class="mt-5">
+    <div class="flex justify-between px-2 md:px-8 mb-4">
+        <div class="flex flex-row space-x-1">
+            <div>
+                <a href="{{path('app_user_edit', {id:1})}}" type="button" class="inline-flex items-center px-3 py-2 text-blue-500 border border-blue-500 rounded-md font-semibold shadow-sm bg-white hover:bg-gray-50 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150"
+                >{{include("svg_icons/lock_logo.html.twig")}}Block</a>
+            </div>
+            <div>
+                <a href="{{path('app_user_edit', {id:1})}}" type="button" class="inline-flex items-center px-3 py-2 text-blue-500 border border-blue-500 rounded-md font-semibold shadow-sm bg-white hover:bg-gray-50 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150"
+                >{{include("svg_icons/unlock_logo.html.twig")}}</a>
+            </div>
+            <div>
+                <a href="{{path('app_user_edit', {id:1})}}" type="button" class="inline-flex items-center px-3 py-2 text-red-500 border border-red-600 rounded-md font-semibold shadow-sm bg-white hover:bg-gray-50 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150"
+                >{{include("svg_icons/trash_logo.html.twig")}}</a>
+            </div>
+        </div>
+        <div>
+            <a href="{{path('app_user_edit', {id:1})}}" type="button" class="inline-flex items-center px-3 py-2 text-red-500 border border-red-600 rounded-md font-semibold shadow-sm bg-white hover:bg-gray-50 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150"
+            >{{include("svg_icons/trash_logo.html.twig")}}</a>
+        </div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+            <div class="p-6">
+                <div class="flex justify-between">
+                    <img class="h-[128px] rounded-full border" 
+                    src="{{asset('images/default-profile-pic.jpg')}}" alt="Default pic">
+                    <div>
+                        <a href="{{path('app_user_edit', {id:1})}}" type="button" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150"
+                        >Edit Profile</a>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-start border-b pb-4 border-gray-300">
+                    <button type="button" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">Change Photo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

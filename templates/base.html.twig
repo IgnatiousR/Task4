@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        {% block stylesheets %}
+        {% endblock %}
+        <script src="//unpkg.com/alpinejs" defer></script>
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body class="antialiased bg-gray-200">
+        {# Notification #}
+		<div x-data="{ show: false, message: 'Loggged in.' }" x-show="show" x-init="setTimeout(() => show = false, 5000)" x-transition @close.window="show=false"
+        class="mt-5 flex justify-between m-auto w-3/4 text-white shadow-inner p-3 bg-emerald-500 rounded">
+			<p>
+				<strong>Info
+				</strong>
+				<span x-html="message"></span>
+			</p>
+			<strong @click="$dispatch('close')" class="text-xl align-center cursor-pointer">&times;</strong>
+		</div>
+        <div class="container mx-auto py-2 md:px-0 px-5">
+            {# header #}
+            <header class="flex justify-between items-center border-b border-black/30">
+                {# logo, search #}
+                <div class="flex items-center">
+                    <a class="flex items-center" href="{{ path('app_main_homepage') }}">{{include("svg_icons/symfony_logo.html.twig")}}
+                        <div class="text-3xl hidden md:block tracking-tighter text-gray-600 font-medium ml-2">SymfonyApp</div>
+                    </a>
+
+                    {# <div class="text-3xl hidden md:block tracking-tighter text-gray-600 font-medium ml-2">
+                        <a href="{{ path('app_main_homepage') }}">SymfonyApp</a>
+                    </div> #}
+
+                    <div class="ml-4">
+						<label>
+							<input class="placeholder:italic placeholder:text-slate-400 bg-white w-full border-slate-300 rounded-md py-2 pl-9 pr-3 sm:text-sm" placeholder="Filter" type="text" name="search"/>
+						</label>
+						<ul class="bg-white border border-gray-100 mt-2 absolute rounded hidden">
+							<li class="pl-8 pr-2 py-1 border-b-2 border-gray-100 relative hover:bg-yellow-50 hover:text-gray-900">
+								<a href="{{ path('app_user_show', {id:1}) }}">User 1</a>
+							</li>
+							<li class="pl-8 pr-2 py-1 border-b-2 border-gray-100 relative hover:bg-yellow-50 hover:text-gray-900">
+								<a href="{{ path('app_user_show', {id:2}) }}">User 2</a>
+							</li>
+
+						</ul>
+					</div>
+
+                </div>
+
+                {# links #}
+                <div class="hidden md:flex space-x-6 text-l">
+                    <p class="py-2">Logged as: <a class="hover:text-stone-500" 
+                    href="{{path('app_user_show', {id:1})}}">John Dou</a>
+					</p>
+                    {{include('_logout_form.html.twig')}}
+                    <a class="inline font-bold text-m px-6 py-2 text-white rounded bg-slate-500 hover:bg-slate-600" 
+                    href="#">Login</a>
+                    <a class="inline font-bold text-m px-4 py-2 text-slate-500 rounded border border-slate-500 hover:bg-slate-500/20" 
+                    href="/">Register</a>
+                </div>
+                <div id="hamburger-icon" class="space-y-2 cursor-pointer md:hidden">
+                    {{include("svg_icons/hamburger_logo.html.twig")}}
+                </div>
+            </header>
+
+            {# Mobile Menu #}
+            <div class="md:hidden">
+				<div id="mobile-menu" class="flex-col items-center hidden py-8 mt-10 space-y-6 bg-white left-6 right-6 drop-shadow-lg rounded-xl">
+					<p>Logged as:
+						<a class="hover:text-stone-500" href="/">John Doe</a>
+					</p>
+					{{include('_logout_form.html.twig')}}
+					<a href="{{ path('app_main_homepage') }}" class="inline font-bold text-sm px-6 py-2 text-white rounded-full bg-slate-500 hover:bg-slate-600">Login</a>
+					<a class="hover:text-stone-500" href="/">Login</a>
+					<a class="hover:text-stone-500" href="/">Register</a>
+				</div>
+			</div>
+
+            {% block body %}{% endblock %}
+
+            <footer class="flex items-center justify-center mt-12">
+                &copy; SymfonyApp   
+            </footer>
+        </div>
+	</body>
+</html>
