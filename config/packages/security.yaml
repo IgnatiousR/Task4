@@ -8,14 +8,22 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: uuid
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            logout:
+                path: app_logout
             lazy: true
             provider: app_user_provider
+            form_login:
+                # "app_login" is the name of the route created
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+            #custom_authenticator: App\Security\LoginFormAuthenticator
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -28,6 +36,8 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        # - { path: ^/users, roles: IS_AUTHENTICATED_FULLY }
+        #- { path: ^/user, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
     security:

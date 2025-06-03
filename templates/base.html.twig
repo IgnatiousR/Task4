@@ -11,10 +11,10 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body class="antialiased bg-gray-200">
+    <body class="antialiased bg-gray-100">
         {# Notification #}
-		<div x-data="{ show: false, message: 'Loggged in.' }" x-show="show" x-init="setTimeout(() => show = false, 5000)" x-transition @close.window="show=false"
-        class="mt-5 flex justify-between m-auto w-3/4 text-white shadow-inner p-3 bg-emerald-500 rounded">
+		<div x-data="{ show: false, message: '' }" x-show="show" @message-received.window="show=true; message=$event.detail.msg; setTimeout(() => show = false, 5000);" x-transition @close.window="show=false"
+        class="mt-5 flex justify-between m-auto w-3/4 text-white shadow-inner p-3 bg-green-500 rounded">
 			<p>
 				<strong>Info
 				</strong>
@@ -54,15 +54,18 @@
 
                 {# links #}
                 <div class="hidden md:flex space-x-6 text-l">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <p class="py-2">Logged as: <a class="hover:text-stone-500" 
-                    href="{{path('app_user_show', {id:1})}}">John Dou</a>
+                    href="{{path('app_user_show', {id:app.user.id})}}">{{app.user.firstName}} {{app.user.lastName}}</a>
 					</p>
                     {{include('_logout_form.html.twig')}}
-                    <a class="inline font-bold text-m px-6 py-2 text-white rounded bg-slate-500 hover:bg-slate-600" 
-                    href="#">Login</a>
-                    <a class="inline font-bold text-m px-4 py-2 text-slate-500 rounded border border-slate-500 hover:bg-slate-500/20" 
-                    href="/">Register</a>
+                {% else %}
+                    <a class="inline font-bold text-m px-6 py-2 text-white rounded bg-slate-600 hover:bg-slate-500" 
+                    href="{{path('app_login')}}">Login</a>
+                    <a class="inline font-bold text-m px-4 py-2 text-slate-600 rounded border border-slate-600 hover:bg-slate-600/20" 
+                    href="{{path('app_register')}}">Register</a>
                 </div>
+                {% endif %}
                 <div id="hamburger-icon" class="space-y-2 cursor-pointer md:hidden">
                     {{include("svg_icons/hamburger_logo.html.twig")}}
                 </div>
@@ -71,13 +74,16 @@
             {# Mobile Menu #}
             <div class="md:hidden">
 				<div id="mobile-menu" class="flex-col items-center hidden py-8 mt-10 space-y-6 bg-white left-6 right-6 drop-shadow-lg rounded-xl">
-					<p>Logged as:
-						<a class="hover:text-stone-500" href="/">John Doe</a>
+					{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <p>Logged as:
+						<a class="hover:text-slate-500" href="{{path('app_user_show', {id:app.user.id})}}">{{app.user.firstName}}</a>
 					</p>
 					{{include('_logout_form.html.twig')}}
-					<a href="{{ path('app_main_homepage') }}" class="inline font-bold text-sm px-6 py-2 text-white rounded-full bg-slate-500 hover:bg-slate-600">Login</a>
-					<a class="hover:text-stone-500" href="/">Login</a>
-					<a class="hover:text-stone-500" href="/">Register</a>
+                    {% else %}
+					<a href="{{ path('app_main_homepage') }}" class="inline font-bold text-sm px-6 py-2 text-white rounded-full bg-slate-600 hover:bg-slate-500">Login</a>
+					<a class="hover:text-slate-500" href="{{path('app_login')}}">Login</a>
+					<a class="hover:text-slate-500" href="{{path('app_register')}}">Register</a>
+                    {% endif %}
 				</div>
 			</div>
 

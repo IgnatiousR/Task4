@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+		<div class="sm:mx-auto sm:w-full sm:max-w-md">
+			<h2 class="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
+                Register a new account
+            </h2>
+            <p class="mt-2 text-center text-slate-500 text-sm leading-5 max-w">
+                Or
+                <a href="{{path('app_login')}}"
+                    class="font-medium text-black underline transition ease-in-out duration-150">
+                    login to your account
+                </a>
+            </p>
+        </div>
+        <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+            <div class="bg-white py-8 px-4 shadow rounded-lg sm:px-10">
+                {{ form_errors(registrationForm) }}
+                {{ form_start(registrationForm) }}
+                    {{form_row(registrationForm.firstName,{'label_attr': {'class': 'block text-sm font-medium leading-5  text-gray-700'},'attr': {'class': 'mb-2 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5'}})}}
+                    {{form_row(registrationForm.lastName,{'label_attr': {'class': 'block text-sm font-medium leading-5  text-gray-700'},'attr': {'class': 'mb-2 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5'}})}}
+                    {{ form_row(registrationForm.email, {'label_attr': {'class': 'block text-sm font-medium leading-5  text-gray-700'},'attr': {'class': 'mb-2 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5'}}) }}
+                    {{ form_row(registrationForm.plainPassword, {
+                    label: 'Password','label_attr': {'class': 'block text-sm font-medium leading-5  text-gray-700'},'attr': {'class': 'mb-2 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5'}}) }}
+                    {# {{ form_row(registrationForm.agreeTerms, {
+                    label: 'Agree Terms','attr': {'class': 'border rounded-md m-2 p-2'}
+                    }) }} #}
+
+                    <div class="mt-6">
+                        <span class="block w-full rounded-md shadow-sm">
+                            <button type="submit"
+                                class="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-slate-600 hover:bg-slate-500 transition duration-150 ease-in-out">
+                                Register
+                            </button>
+                        </span>
+                    </div>
+                {{ form_end(registrationForm) }}
+		    </div>
+        </div>
+	</div>
+
+{% endblock %}
+{# <div class="m-auto">
+		<div class="py-12 border-gray-200 text-center">
+			<h1 class="text-6xl pt-12 pb-8 tracking-tight">
+				Register
+			</h1>
+            {{ form_errors(registrationForm) }}
+			{{ form_start(registrationForm) }}
+                {{form_row(registrationForm.firstName,{'attr': {'class': 'border rounded-md m-2 p-2'}})}}
+                {{form_row(registrationForm.lastName,{'attr': {'class': 'border rounded-md m-2 p-2'}})}}
+                {{ form_row(registrationForm.email, {label: 'Email Address', 'attr': {'class': 'border rounded-md my-2 mx-2 p-2'}}) }}
+                {{ form_row(registrationForm.plainPassword, {
+                label: 'Password','attr': {'class': 'border rounded-md m-2 p-2'}
+                }) }}
+			    {{ form_row(registrationForm.agreeTerms, {
+                label: 'Agree Terms','attr': {'class': 'border rounded-md m-2 p-2'}
+                }) }}
+                <button type="submit" 
+                class="bg-emerald-500 text-white py-2 px-6 rounded-md m-2">Register</button>
+			{{ form_end(registrationForm) }}
+		</div>
+	</div> #}

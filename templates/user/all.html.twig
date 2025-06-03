@@ -19,27 +19,125 @@
             </div>
         </div>
         <div>
-            <a href="{{path('app_user_edit', {id:1})}}" type="button" class="inline-flex items-center px-3 py-2 text-red-500 border border-red-600 rounded-md font-semibold shadow-sm bg-white hover:bg-gray-50 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150"
-            >{{include("svg_icons/trash_logo.html.twig")}}</a>
+            <label>
+                <input class="placeholder:italic placeholder:text-slate-400 bg-white w-full border-slate-300 rounded-md py-2 pl-9 pr-3 sm:text-sm" placeholder="Filter" type="text" name="search"/>
+            </label>
         </div>
     </div>
     
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm rounded-lg">
-            <div class="p-6">
-                <div class="flex justify-between">
-                    <img class="h-[128px] rounded-full border" 
-                    src="{{asset('images/default-profile-pic.jpg')}}" alt="Default pic">
-                    <div>
-                        <a href="{{path('app_user_edit', {id:1})}}" type="button" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150"
-                        >Edit Profile</a>
+        <div class="">
+            <div >
+                {# <h1 class="text-xl mb-2">Your orders</h1> #}
+                <div class="bg-white overflow-auto rounded-lg shadow hidden md:block">
+                    <table class="w-full">
+                        <thead class=" border-b-2 border-gray-200">
+                            <tr>
+                                <th class="w-20 p-3 text-left">
+                                    <input id="default-checkbox" type="checkbox" value="">
+                                </th>
+                                <th class="w-20 p-3 font-semibold tracking-wide text-left">Name</th>
+                                <th class="p-3 font-semibold tracking-wide text-left">Email</th>
+                                <th class="w-24 p-3 font-semibold tracking-wide text-left">Status</th>
+                                <th class="w-24 p-3 font-semibold tracking-wide text-left">Last seen</th>
+                                <th class="w-32 p-3 font-semibold tracking-wide text-left">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr>
+                                <td class="p-3 ">
+                                    <input id="default-checkbox" type="checkbox" value="">
+                                </td>
+                                <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                                    <a href="#" class="font-bold hover:underline">User</a>
+                                </td>
+                                <td class="p-3 text-sm text-gray-700 whitespace-nowrap">Test@gmail.com</td>
+                                <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                                    <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50"
+                                    >Active</span>
+                                </td>
+                                <td class="p-3 text-sm text-gray-700 whitespace-nowrap">5 minutes ago</td>
+                                <td class="p-3 text-sm text-gray-700 whitespace-nowrap">$200.00</td>
+                            </tr>
+                            <tr class="text-gray-600">
+                                <td class="p-3 ">
+                                    <input id="default-checkbox" type="checkbox" value="">
+                                </td>
+                                <td class="p-3 text-sm whitespace-nowrap">
+                                    <a href="#" class="line-through font-bold hover:underline">Test User</a>
+                                </td>
+                                <td class="p-3 text-sm whitespace-nowrap">Test@.com</td>
+                                <td class="p-3 text-sm whitespace-nowrap">
+                                    <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50"
+                                    >Blocked</span>
+                                </td>
+                                <td class="p-3 text-sm whitespace-nowrap">Less than a minute ago</td>
+                                <td class="p-3 text-sm whitespace-nowrap">$200.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+                    <div class="bg-white space-y-3 p-4 rounded-lg shadow">
+                        <div class="flex items-center space-x-2 text-sm">
+                        <div>
+                            <a href="#" class=" font-bold hover:underline">User</a>
+                        </div>
+                        <div class="text-gray-500">5 minutes ago</div>
+                        <div>
+                            <span
+                            class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Active</span>
+                        </div>
+                        </div>
+                        <div class="text-sm text-gray-700">
+                        test@gmail.com
+                        </div>
+                        <div class="text-sm font-medium text-black">
+                        $200.00
+                        </div>
+                    </div>
+                    <div class="bg-white space-y-3 p-4 rounded-lg shadow">
+                        <div class="flex items-center space-x-2 text-sm">
+                        <div>
+                            <a href="#" class="line-through font-bold hover:underline">Test User</a>
+                        </div>
+                        <div class="text-gray-500">Less than a minute ago</div>
+                        <div>
+                            <span
+                            class="p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50">Blocked</span>
+                        </div>
+                        </div>
+                        <div class="text-sm text-gray-700">
+                        Test@.com
+                        </div>
+                        <div class="text-sm font-medium text-black">
+                        $200.00
+                        </div>
+                    </div>
+                    <div class="bg-white space-y-3 p-4 rounded-lg shadow">
+                        <div class="flex items-center space-x-2 text-sm">
+                        <div>
+                            <a href="#" class="text-blue-500 font-bold hover:underline">#1002</a>
+                        </div>
+                        <div class="text-gray-500">10/10/2021</div>
+                        <div>
+                            <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">Canceled</span>
+                        </div>
+                        </div>
+                        <div class="text-sm text-gray-700">
+                        Kring New Fit office chair, mesh + PU, black
+                        </div>
+                        <div class="text-sm font-medium text-black">
+                        $200.00
+                        </div>
                     </div>
                 </div>
-                <div class="mt-6 flex justify-start border-b pb-4 border-gray-300">
-                    <button type="button" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">Change Photo</button>
-                </div>
+                
             </div>
         </div>
     </div>
 </div>
 {% endblock %}
+
+
