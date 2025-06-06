@@ -2,14 +2,28 @@
 
 namespace App\EventListener;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\Security\Core\Event\AuthenticationSuccessEvent;
 
-final class LoginListener
+class LoginListener
 {
+    protected $doctrine;
+
+    protected $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager){
+        $this->entityManager = $entityManager;
+    }
+
     #[AsEventListener(event: 'security.authentication.success')]
-    public function onSecurityAuthenticationSuccess(AuthenticationSuccessEvent $event): void
+    public function onSecurityAuthenticationSuccess(AuthenticationSuccessEvent $event)
     {
-        //dd("Logged In");
+        $user = $event->getAuthenticationToken()->getUser();
+        //dd($event);
+        $user->setLoggedAt(new \DateTimeImmutable('now'));
+        //$em = $this->getDoctrine()->getManager();
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
     }
 }

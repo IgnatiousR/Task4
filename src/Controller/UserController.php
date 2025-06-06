@@ -2,14 +2,22 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\ChangePasswordForm;
 use App\Form\DeleteAccountForm;
 use App\Form\UserTypeForm;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use \Doctrine\Persistence\ManagerRegistry;
 
 final class UserController extends AbstractController
 {
@@ -24,7 +32,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/user/{id}/edit', name: 'app_user_edit')]
-    public function edit(int $id, Request $request): Response
+    public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         if ($this->getUser()->getId() !== $id) {
@@ -37,9 +45,10 @@ final class UserController extends AbstractController
         $userForm->handleRequest($request);
 
         if($userForm->isSubmitted() && $userForm->isValid()){
-            $user = $userForm->getData();
-            // $entityManager->persist($user);
-            // $entityManager->flush();
+            //$user = $userForm->getData();
+            $user->setUpdatedAt(new \DateTimeImmutable('now'));
+            $entityManager->persist($user);
+            $entityManager->flush();
             $this->addFlash(
                 'status-profile-information',
                 'user-updated'
@@ -52,9 +61,8 @@ final class UserController extends AbstractController
         $passwordForm->handleRequest($request);
 
         if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
-            $user = $passwordForm->getData();
-            // $entityManager->persist($user);
-            // $entityManager->flush();
+            $entityManager->persist($user);
+            $entityManager->flush();
             $this->addFlash(
                 'status-password',
                 'password-changed'
@@ -72,7 +80,7 @@ final class UserController extends AbstractController
             // $entityManager->remove($user);
             // $entityManager->flush();
             // $request->getSession()->invalidate();
-            return $this->redirectToRoute('posts.index');
+            return $this->redirectToRoute('app_main_homepage');
         }
 
 
@@ -84,9 +92,87 @@ final class UserController extends AbstractController
     }
 
     #[Route('/users', name: 'app_user_all')]
-    public function displayAll(): Response
+    public function displayAll(ManagerRegistry $doctrine, Request $request, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        return $this->render('user/all.html.twig');
+
+        $users = $doctrine->getRepository(User::class)->findBy([], ['logged_at' => 'DESC']);
+        $form = $this->createFormBuilder($users)
+            ->add('Block', SubmitType::class, ['label' => 'Block'])
+            ->add('Unblock', SubmitType::class, ['label' => 'Unblock'])
+            ->add('Delete', SubmitType::class, ['label' => 'Delete'])
+            ->add('public', CheckboxType::class, ['label'    => 'Show this entry publicly?',
+            'required' => false,])
+            ->add('select', CheckboxType::class, ['label'    => 'All Select',
+            'required' => false,])
+            ->add('users', EntityType::class, [
+                'class' => User::class,
+                'expanded' => true,
+                'multiple' => true,
+                'query_builder' => function (EntityRepository $er): QueryBuilder {
+                    return $er->createQueryBuilder('user')
+                        ->orderBy('user.logged_at', 'DESC');
+                },
+                'choice_label' => 'firstName',
+            ])
+            ->getForm();
+        
+        $form->handleRequest($request);
+
+        // $('#select-all').on('change', function()
+        // {
+        //     if ($(this).is(':checked')) {
+        //         $('.class-name-of-checkboxes').attr('checked', 'checked')
+        //     }
+        // })
+
+        if ($form->getClickedButton() && 'Block' === $form->getClickedButton()->getName()) {
+            if($this->getUser()->getStatus() !== "Active"){
+                return $this->redirectToRoute('app_user_all');
+            }
+            $data = $form->getData();
+            $u = $data['users'];
+            if(!isset($u)){
+                return $this->redirectToRoute('app_user_all');
+            }
+            foreach ($u as $user){
+                $user->setStatus("Blocked");
+                $entityManager->persist($user);
+                $entityManager->flush();
+            }
+            return $this->redirectToRoute('app_user_all');
+        }
+
+         if ($form->getClickedButton() && 'Unblock' === $form->getClickedButton()->getName()) {
+            if($this->getUser()->getStatus() !== "Active"){
+                return $this->redirectToRoute('app_user_all');
+            }
+            $data = $form->getData();
+            $u = $data['users'];
+            if(!isset($u)){
+                return $this->redirectToRoute('app_user_all');
+            }
+            foreach ($u as $user){
+                $user->setStatus("Active");
+                $entityManager->persist($user);
+                $entityManager->flush();
+            }
+            return $this->redirectToRoute('app_user_all');
+        }
+
+        if ($form->getClickedButton() && 'Delete' === $form->getClickedButton()->getName()) {
+            $data = $form->getData();
+            dd($data);
+            // if($data->getPublic() === "false") {
+            //     dd("Unchecked");
+            // } else {
+            //     dd("checked");
+            // }
+            dd("Deleted");
+        }
+        return $this->render('user/all.html.twig',[
+            "users" => $users,
+            "form" => $form
+        ]);
     }
 }

@@ -11,6 +11,8 @@
         "doctrine/doctrine-bundle": "^2.14",
         "doctrine/doctrine-migrations-bundle": "^3.4",
         "doctrine/orm": "^3.3",
+        "knplabs/knp-time-bundle": "^2.4",
+        "nesbot/carbon": "^3.9",
         "symfony/asset": "7.2.*",
         "symfony/asset-mapper": "7.2.*",
         "symfony/clock": "7.2.*",
@@ -33,9 +35,12 @@
         "symfony/yaml": "7.2.*",
         "symfonycasts/tailwind-bundle": "^0.10.0",
         "twig/extra-bundle": "^2.12|^3.0",
+        "twig/intl-extra": "^3.21",
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^4.1",
+        "fakerphp/faker": "^1.24",
         "symfony/debug-bundle": "7.2.*",
         "symfony/maker-bundle": "^1.63",
         "symfony/requirements-checker": "^2.0",

@@ -24,11 +24,6 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
-            // $firstName = $form->get('firstName')->getData();
-            // $lastName = $form->get('firstName')->getData();
-
-            // $user->setFirstName($firstName);
-            // $user->setLastName($lastName);
             $uuid = Uuid::v4();
             $user->setUuid($uuid);
             $user->setStatus("Active");
@@ -36,12 +31,10 @@ class RegistrationController extends AbstractController
             $user->setLoggedAt(new \DateTimeImmutable('now'));
             $user->setUpdatedAt(new \DateTimeImmutable('now'));
 
-            // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
             $entityManager->persist($user);
             $entityManager->flush();
-            // do anything else you need here, like send an email
 
             return $this->redirectToRoute('app_user_show',['id'=> $user->getId()]);
         }

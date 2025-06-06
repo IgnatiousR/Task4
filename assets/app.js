@@ -1,4 +1,6 @@
 import './bootstrap.js';
+const $ = require('jquery');
+global.$ = global.jQuery = $;
 /*
  * Welcome to your app's main JavaScript file!
  *
@@ -6,7 +8,12 @@ import './bootstrap.js';
  * which should already be in your base.html.twig.
  */
 import './styles/app.css';
-
+$('#select-all').on('change', function()
+{
+    if ($(this).is(':checked')) {
+        $('#test').attr('checked', 'checked')
+    }
+})
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 
 const btn = document.getElementById("hamburger-icon");
