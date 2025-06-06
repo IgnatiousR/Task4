@@ -101,20 +101,29 @@ final class UserController extends AbstractController
             ->add('Block', SubmitType::class, ['label' => 'Block'])
             ->add('Unblock', SubmitType::class, ['label' => 'Unblock'])
             ->add('Delete', SubmitType::class, ['label' => 'Delete'])
-            ->add('public', CheckboxType::class, ['label'    => 'Show this entry publicly?',
-            'required' => false,])
-            ->add('select', CheckboxType::class, ['label'    => 'All Select',
+            ->add('selectAll', CheckboxType::class, ['label' => 'Select All Form',
             'required' => false,])
             ->add('users', EntityType::class, [
                 'class' => User::class,
+                'choice_label' => 'firstName',
                 'expanded' => true,
                 'multiple' => true,
                 'query_builder' => function (EntityRepository $er): QueryBuilder {
                     return $er->createQueryBuilder('user')
                         ->orderBy('user.logged_at', 'DESC');
                 },
-                'choice_label' => 'firstName',
             ])
+            // ->add('public', CheckboxType::class, ['label' => 'Show this entry publicly?','attr' => ['class' => 'item'],
+            // 'required' => false,])
+            // ->add('selectAll', CheckboxType::class, [
+            //     'label' => 'Select All',
+            //     'required' => false,
+            //     'mapped' => false, // This field is not mapped to any entity property
+            //     'attr' => [
+            //         'class' => 'select-all-checkbox',
+            //         'onclick' => 'toggleAllCheckboxes(this)'
+            //     ],
+            // ])
             ->getForm();
         
         $form->handleRequest($request);

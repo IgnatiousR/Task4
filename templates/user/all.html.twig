@@ -28,10 +28,8 @@
             </label>
         </div>
     </div>
-    {{ form_label(form.public) }}
-    {{ form_widget(form.public) }}
-    <input type="checkbox" id="select-all" name="select-all" /> Select All
-    <input type="checkbox" id="test" name="test" /> Test
+    {# {{ form_label(form.selectAll) }}
+    {{ form_widget(form.selectAll) }} #}
     
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="">
@@ -42,7 +40,7 @@
                         <thead class=" border-b-2 border-gray-200">
                             <tr>
                                 <th class="w-20 p-3 text-left">
-                                    <input id="default-checkbox" type="checkbox" value="">
+                                    {{ form_widget(form.selectAll) }}
                                 </th>
                                 <th class="w-20 p-3 font-semibold tracking-wide text-left">Name</th>
                                 <th class="p-3 font-semibold tracking-wide text-left">Email</th>
@@ -55,7 +53,7 @@
                             {% for user in users %}
                                 <tr class=" {{user.status =='Active' ? 'text-gray-700' :'text-gray-500' }}">
                                     <td class="p-3 ">
-                                        {{ form_widget(form.users[user.id]) }}
+                                        {{ form_widget(form.users[user.id], {'attr': {'class': 'item' }}) }}
                                     </td>
                                     <td class="p-3 text-sm  whitespace-nowrap">
                                         <a href="{{ path('app_user_show', {id:user.id}) }}" class="font-bold hover:underline {{user.status =='Active' ? '' :'line-through' }}">{{user.firstName}} {{user.lastName}}</a>
