@@ -1,0 +1,8 @@
+
+# database:
+#     type: postgresql:16
+#     disk: 1024
+
+database:
+    type: mariadb:10.6
+    disk: 256
