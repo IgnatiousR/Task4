@@ -23,40 +23,18 @@
 			<strong @click="$dispatch('close')" class="text-xl align-center cursor-pointer">&times;</strong>
 		</div>
         <div class="container mx-auto py-2 md:px-0 px-5">
-            {# header #}
-            <header class="flex justify-between items-center border-b border-black/30">
-                {# logo, search #}
+            <header class="flex md:flex-row flex-col justify-between items-center border-b border-black/30">
                 <div class="flex items-center">
                     <a class="flex items-center" href="{{ path('app_main_homepage') }}">{{include("svg_icons/symfony_logo.html.twig")}}
-                        <div class="text-3xl hidden md:block tracking-tighter text-gray-600 font-medium ml-2">SymfonyApp</div>
+                        <div class="text-3xl tracking-tighter text-gray-600 font-medium ml-2">SymfonyApp</div>
                     </a>
-
-                    {# <div class="text-3xl hidden md:block tracking-tighter text-gray-600 font-medium ml-2">
-                        <a href="{{ path('app_main_homepage') }}">SymfonyApp</a>
-                    </div> #}
-
-                    <div class="ml-4">
-						<label>
-							<input class="hidden placeholder:italic placeholder:text-slate-400 bg-white w-full border-slate-300 rounded-md py-2 pl-9 pr-3 sm:text-sm" placeholder="Filter" type="text" name="search"/>
-						</label>
-						<ul class="bg-white border border-gray-100 mt-2 absolute rounded hidden">
-							<li class="pl-8 pr-2 py-1 border-b-2 border-gray-100 relative hover:bg-yellow-50 hover:text-gray-900">
-								<a href="{{ path('app_user_show', {id:1}) }}">User 1</a>
-							</li>
-							<li class="pl-8 pr-2 py-1 border-b-2 border-gray-100 relative hover:bg-yellow-50 hover:text-gray-900">
-								<a href="{{ path('app_user_show', {id:2}) }}">User 2</a>
-							</li>
-
-						</ul>
-					</div>
-
                 </div>
 
                 {# links #}
-                <div class="hidden md:flex space-x-6 text-l">
+                <div class="flex space-x-6 text-l py-4 md:py-0">
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <p class="py-2">Logged as: <a class="hover:text-stone-500" 
-                    href="{{path('app_user_show', {id:app.user.id})}}">{{app.user.firstName}} {{app.user.lastName}}</a>
+                    href="{{path('app_user_show', {uuid:app.user.uuid})}}">{{app.user.firstName}} {{app.user.lastName}}</a>
 					</p>
                     {{include('_logout_form.html.twig')}}
                 {% else %}
@@ -66,26 +44,25 @@
                     href="{{path('app_register')}}">Register</a>
                 </div>
                 {% endif %}
-                <div id="hamburger-icon" class="space-y-2 cursor-pointer md:hidden">
+                {# <div id="hamburger_icon" class="space-y-2 cursor-pointer md:hidden">
                     {{include("svg_icons/hamburger_logo.html.twig")}}
-                </div>
+                </div> #}
             </header>
 
             {# Mobile Menu #}
-            <div class="md:hidden">
-				<div id="mobile-menu" class="flex-col items-center hidden py-8 mt-10 space-y-6 bg-white left-6 right-6 drop-shadow-lg rounded-xl">
+            {# <div class="md:hidden">
+				<div id="mobile-menu" class="flex-col hidden items-center py-8 mt-10 space-y-6 bg-white left-6 right-6 drop-shadow-lg rounded-xl">
 					{% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <p>Logged as:
-						<a class="hover:text-slate-500" href="{{path('app_user_show', {id:app.user.id})}}">{{app.user.firstName}}</a>
+						<a class="hover:text-slate-500" href="{{path('app_user_show', {uuid:app.user.uuid})}}">{{app.user.firstName}}</a>
 					</p>
 					{{include('_logout_form.html.twig')}}
                     {% else %}
-					<a href="{{ path('app_main_homepage') }}" class="inline font-bold text-sm px-6 py-2 text-white rounded-full bg-slate-600 hover:bg-slate-500">Login</a>
-					<a class="hover:text-slate-500" href="{{path('app_login')}}">Login</a>
+					<a href="{{path('app_login')}}" class="inline font-bold text-sm px-6 py-2 text-white rounded-full bg-slate-600 hover:bg-slate-500">Login</a>
 					<a class="hover:text-slate-500" href="{{path('app_register')}}">Register</a>
                     {% endif %}
 				</div>
-			</div>
+			</div> #}
 
             {% block body %}{% endblock %}
 

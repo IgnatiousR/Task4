@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,22 +22,22 @@ use \Doctrine\Persistence\ManagerRegistry;
 
 final class UserController extends AbstractController
 {
-    #[Route('/user/{id}', name: 'app_user_show')]
-    public function show(int $id, UserRepository $userRepository): Response
+    #[Route('/user/{uuid}', name: 'app_user_show')]
+    public function show(string $uuid, UserRepository $userRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $user = $userRepository->find($id);
+        $user = $userRepository->findOneBy(['uuid' => $uuid]);
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
     }
 
-    #[Route('/user/{id}/edit', name: 'app_user_edit')]
-    public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/user/{uuid}/edit', name: 'app_user_edit')]
+    public function edit(string $uuid, Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        if ($this->getUser()->getId() !== $id) {
-            return $this->redirectToRoute('app_user_edit', ['id'=> $this->getUser()->getId()]);
+        if ($this->getUser()->getUuid() !== $uuid) {
+            return $this->redirectToRoute('app_user_edit', ['uuid'=> $this->getUser()->getUuid()]);
         }
         $user = $this->getUser();
 
@@ -53,7 +54,7 @@ final class UserController extends AbstractController
                 'status-profile-information',
                 'user-updated'
             );
-            return $this->redirectToRoute('app_user_show', ['id' => $user->getId()]);
+            return $this->redirectToRoute('app_user_show', ['uuid' => $user->getUuid()]);
         }
 
         //change password
@@ -76,10 +77,10 @@ final class UserController extends AbstractController
         
         if ($deleteAccountForm->isSubmitted() && $deleteAccountForm->isValid()) {
             $user = $deleteAccountForm->getData();
-            // $security->logout(false);
-            // $entityManager->remove($user);
-            // $entityManager->flush();
-            // $request->getSession()->invalidate();
+            $security->logout(false);
+            $entityManager->remove($user);
+            $entityManager->flush();
+            $request->getSession()->invalidate();
             return $this->redirectToRoute('app_main_homepage');
         }
 
@@ -92,15 +93,15 @@ final class UserController extends AbstractController
     }
 
     #[Route('/users', name: 'app_user_all')]
-    public function displayAll(ManagerRegistry $doctrine, Request $request, EntityManagerInterface $entityManager): Response
+    public function displayAll(ManagerRegistry $doctrine, Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $users = $doctrine->getRepository(User::class)->findBy([], ['logged_at' => 'DESC']);
         $form = $this->createFormBuilder($users)
-            ->add('Block', SubmitType::class, ['label' => 'Block'])
-            ->add('Unblock', SubmitType::class, ['label' => 'Unblock'])
-            ->add('Delete', SubmitType::class, ['label' => 'Delete'])
+            ->add('Block', SubmitType::class, ['label' => false, 'label_html' => true,])
+            ->add('Unblock', SubmitType::class, ['label' => false, 'label_html' => true,])
+            ->add('Delete', SubmitType::class, ['label' => false, 'label_html' => true,])
             ->add('selectAll', CheckboxType::class, ['label' => 'Select All Form',
             'required' => false,])
             ->add('users', EntityType::class, [
@@ -113,32 +114,11 @@ final class UserController extends AbstractController
                         ->orderBy('user.logged_at', 'DESC');
                 },
             ])
-            // ->add('public', CheckboxType::class, ['label' => 'Show this entry publicly?','attr' => ['class' => 'item'],
-            // 'required' => false,])
-            // ->add('selectAll', CheckboxType::class, [
-            //     'label' => 'Select All',
-            //     'required' => false,
-            //     'mapped' => false, // This field is not mapped to any entity property
-            //     'attr' => [
-            //         'class' => 'select-all-checkbox',
-            //         'onclick' => 'toggleAllCheckboxes(this)'
-            //     ],
-            // ])
             ->getForm();
         
         $form->handleRequest($request);
-
-        // $('#select-all').on('change', function()
-        // {
-        //     if ($(this).is(':checked')) {
-        //         $('.class-name-of-checkboxes').attr('checked', 'checked')
-        //     }
-        // })
-
         if ($form->getClickedButton() && 'Block' === $form->getClickedButton()->getName()) {
-            if($this->getUser()->getStatus() !== "Active"){
-                return $this->redirectToRoute('app_user_all');
-            }
+            $this->checkUser();
             $data = $form->getData();
             $u = $data['users'];
             if(!isset($u)){
@@ -153,9 +133,7 @@ final class UserController extends AbstractController
         }
 
          if ($form->getClickedButton() && 'Unblock' === $form->getClickedButton()->getName()) {
-            if($this->getUser()->getStatus() !== "Active"){
-                return $this->redirectToRoute('app_user_all');
-            }
+            $this->checkUser();
             $data = $form->getData();
             $u = $data['users'];
             if(!isset($u)){
@@ -170,18 +148,43 @@ final class UserController extends AbstractController
         }
 
         if ($form->getClickedButton() && 'Delete' === $form->getClickedButton()->getName()) {
+            $this->checkUser();
             $data = $form->getData();
-            dd($data);
-            // if($data->getPublic() === "false") {
-            //     dd("Unchecked");
-            // } else {
-            //     dd("checked");
-            // }
-            dd("Deleted");
+            $u = $data['users'];
+            $isUser = false;
+
+            // dd($u, $this->getUser());
+            if(!isset($u)){
+                return $this->redirectToRoute('app_user_all');
+            }
+            if(in_array($this->getUser() , $u->toArray())){
+                 $isUser = true;
+            }
+            foreach ($u as $user){
+                $entityManager->remove($user);
+                $entityManager->flush();
+            }
+
+            if($isUser){
+                $security->logout(false);
+                $request->getSession()->invalidate();
+                return $this->redirectToRoute('app_main_homepage');
+            }
+            // $security->logout(false);
+            // $entityManager->remove($user);
+            // $entityManager->flush();
+            // $request->getSession()->invalidate();
+            return $this->redirectToRoute('app_user_all');
         }
         return $this->render('user/all.html.twig',[
             "users" => $users,
             "form" => $form
         ]);
+    }
+
+    private function checkUser(){
+        if($this->getUser()->getStatus() !== "Active"){
+            return $this->redirectToRoute('app_login');
+        }
     }
 }

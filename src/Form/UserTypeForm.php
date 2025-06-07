@@ -20,16 +20,6 @@ class UserTypeForm extends AbstractType
             ])
             ->add('email')
             ->add('phoneNumber')
-            // ->add('register_at', null, [
-            //     'widget' => 'single_text',
-            // ])
-            // ->add('logged_at', null, [
-            //     'widget' => 'single_text',
-            // ])
-            // ->add('updated_at', null, [
-            //     'widget' => 'single_text',
-            // ])
-            // ->add('status')
         ;
     }
 

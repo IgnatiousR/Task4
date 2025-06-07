@@ -22,12 +22,17 @@ document.getElementById('form_selectAll').addEventListener('click', function() {
       }
     });
 
+document.getElementById('hamburger_icon').addEventListener('click', function() {
+    document.getElementById("mobile-menu").toggle("flex");
+    document.getElementById("mobile-menu").toggle("hidden");
+});
+
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 
-const btn = document.getElementById("hamburger-icon");
-const mobile_menu = document.getElementById("mobile-menu");
+// const btn = document.getElementById("hamburger_icon");
+// const mobile_menu = document.getElementById("mobile-menu");
 
-btn.addEventListener("click", ()=>{
-    mobile_menu.classList.toggle("flex");
-    mobile_menu.classList.toggle("hidden");
-})
+// btn.addEventListener("click", ()=>{
+//     mobile_menu.classList.toggle("flex");
+//     mobile_menu.classList.toggle("hidden");
+// })

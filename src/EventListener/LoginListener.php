@@ -20,9 +20,7 @@ class LoginListener
     public function onSecurityAuthenticationSuccess(AuthenticationSuccessEvent $event)
     {
         $user = $event->getAuthenticationToken()->getUser();
-        //dd($event);
         $user->setLoggedAt(new \DateTimeImmutable('now'));
-        //$em = $this->getDoctrine()->getManager();
         $this->entityManager->persist($user);
         $this->entityManager->flush();
     }

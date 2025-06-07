@@ -6,21 +6,9 @@
     {{ form_start(form) }}
     <div class="flex justify-between px-2 md:px-8 mb-4">
         <div class="flex flex-row space-x-1">
-            {# <div>
-                <a href="{{path('app_user_edit', {id:1})}}" type="button" class="inline-flex items-center px-3 py-2 text-blue-500 border border-blue-500 rounded-md font-semibold shadow-sm bg-white hover:bg-gray-50 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150"
-                >{{include("svg_icons/lock_logo.html.twig")}}Block</a>
-            </div>
-            <div>
-                <a href="{{path('app_user_edit', {id:1})}}" type="button" class="inline-flex items-center px-3 py-2 text-blue-500 border border-blue-500 rounded-md font-semibold shadow-sm bg-white hover:bg-gray-50 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150"
-                >{{include("svg_icons/unlock_logo.html.twig")}}</a>
-            </div>
-            <div>
-                <a href="{{path('app_user_edit', {id:1})}}" type="button" class="inline-flex items-center px-3 py-2 text-red-500 border border-red-600 rounded-md font-semibold shadow-sm bg-white hover:bg-gray-50 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150"
-                >{{include("svg_icons/trash_logo.html.twig")}}</a>
-            </div> #}
-            {{ form_widget(form.Unblock, {'attr': {'class': 'inline-flex items-center px-3 py-2 text-blue-500 border border-blue-500 rounded-md font-semibold shadow-sm bg-white hover:bg-gray-50 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150' }}) }}
-            {{ form_widget(form.Block, {'attr': {'class': 'inline-flex items-center px-3 py-2 text-blue-500 border border-blue-500 rounded-md font-semibold shadow-sm bg-white hover:bg-gray-50 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150' }}) }}
-            {{ form_widget(form.Delete, {'attr': {'class': 'inline-flex items-center px-3 py-2 text-red-500 border border-red-600 rounded-md font-semibold shadow-sm bg-white hover:bg-gray-50 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150' }}) }}
+            {{ form_widget(form.Block, {'label': include("svg_icons/lock_logo.html.twig") ,'attr': {'class': 'inline-flex items-center px-3 py-2 text-blue-500 border border-blue-500 rounded-md font-semibold shadow-sm bg-white hover:bg-gray-50 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150' }}) }}
+            {{ form_widget(form.Unblock, {'label': include("svg_icons/unlock_logo.html.twig"),'attr': {'class': 'inline-flex items-center px-3 py-2 text-blue-500 border border-blue-500 rounded-md font-semibold shadow-sm bg-white hover:bg-gray-50 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150' }}) }}
+            {{ form_widget(form.Delete, {'label': include("svg_icons/trash_logo.html.twig"),'attr': {'class': 'inline-flex items-center px-3 py-2 text-red-500 border border-red-600 rounded-md font-semibold shadow-sm bg-white hover:bg-gray-50 focus:outline-none disabled:opacity-25 transition ease-in-out duration-150' }}) }}
         </div>
         <div>
             <label>
@@ -28,129 +16,54 @@
             </label>
         </div>
     </div>
-    {# {{ form_label(form.selectAll) }}
-    {{ form_widget(form.selectAll) }} #}
-    
+
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="">
-            <div >
-                {# <h1 class="text-xl mb-2">Your orders</h1> #}
-                <div class="bg-white overflow-auto rounded-lg shadow hidden md:block">
-                    <table class="w-full">
-                        <thead class=" border-b-2 border-gray-200">
-                            <tr>
-                                <th class="w-20 p-3 text-left">
-                                    {{ form_widget(form.selectAll) }}
-                                </th>
-                                <th class="w-20 p-3 font-semibold tracking-wide text-left">Name</th>
-                                <th class="p-3 font-semibold tracking-wide text-left">Email</th>
-                                <th class="w-24 p-3 font-semibold tracking-wide text-left">Status</th>
-                                <th class="w-24 p-3 font-semibold tracking-wide text-left">Last seen</th>
-                                <th class="w-32 p-3 font-semibold tracking-wide text-left">Register Time</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            {% for user in users %}
-                                <tr class=" {{user.status =='Active' ? 'text-gray-700' :'text-gray-500' }}">
-                                    <td class="p-3 ">
-                                        {{ form_widget(form.users[user.id], {'attr': {'class': 'item' }}) }}
-                                    </td>
-                                    <td class="p-3 text-sm  whitespace-nowrap">
-                                        <a href="{{ path('app_user_show', {id:user.id}) }}" class="font-bold hover:underline {{user.status =='Active' ? '' :'line-through' }}">{{user.firstName}} {{user.lastName}}</a>
-                                    </td>
-                                    <td class="p-3 text-sm whitespace-nowrap">{{user.email}}</td>
-                                    <td class="p-3 text-sm whitespace-nowrap">
-                                        <span class="p-1.5 text-xs font-medium no-underline uppercase tracking-wider rounded-lg bg-opacity-50 {{user.status =='Active' ? 'text-green-800 bg-green-200' :'text-red-800 bg-red-200' }}" 
-                                        >{{user.status}}</span>
-                                    </td>
-                                    <td class="p-3 inline-block text-sm whitespace-nowrap cursor-pointer ">
-                                        <div class="relative flex items-center group">
-                                            {{user.loggedAt|ago}}
-                                            <div class="absolute left-0 items-center hidden ml-20 group-hover:flex">
-                                                <div class="w-3 h-3 -mr-2 rotate-45 bg-black"></div>
-                                                <span class="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black shadow-lg rounded-md">
-                                                    {{user.loggedAt|format_datetime()}}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    {# <td class="p-3 inline-block text-sm whitespace-nowrap cursor-pointer ">
-                                        <div class="relative flex items-center group">
-                                            {{user.registerAt|ago}}
-                                            <div class="absolute left-0 items-center hidden ml-20 group-hover:flex">
-                                                <div class="w-3 h-3 -mr-2 rotate-45 bg-black"></div>
-                                                <span class="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black shadow-lg rounded-md">
-                                                    {{user.registerAt|format_datetime()}}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </td> #}
-                                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{user.registerAt|format_datetime()}}</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
-                    <div class="bg-white space-y-3 p-4 rounded-lg shadow">
-                        <div class="flex items-center space-x-2 text-sm">
-                            <div>
-                                <a href="#" class=" font-bold hover:underline">User</a>
-                            </div>
-                            <div class="text-gray-500">5 minutes ago</div>
-                            <div>
-                                <span
-                                class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Active</span>
-                            </div>
-                        </div>
-                        <div class="text-sm text-gray-700">
-                        test@gmail.com
-                        </div>
-                        <div class="text-sm font-medium text-black">
-                        $200.00
-                        </div>
-                    </div>
-
-                    <div class="bg-white space-y-3 p-4 rounded-lg shadow">
-                        <div class="flex items-center space-x-2 text-sm">
-                        <div>
-                            <a href="#" class="line-through font-bold hover:underline">Test User</a>
-                        </div>
-                        <div class="text-gray-500">Less than a minute ago</div>
-                        <div>
-                            <span
-                            class="p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50">Blocked</span>
-                        </div>
-                        </div>
-                        <div class="text-sm text-gray-700">
-                        Test@.com
-                        </div>
-                        <div class="text-sm font-medium text-black">
-                        $200.00
-                        </div>
-                    </div>
-                    <div class="bg-white space-y-3 p-4 rounded-lg shadow">
-                        <div class="flex items-center space-x-2 text-sm">
-                        <div>
-                            <a href="#" class="text-blue-500 font-bold hover:underline">#1002</a>
-                        </div>
-                        <div class="text-gray-500">10/10/2021</div>
-                        <div>
-                            <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">Canceled</span>
-                        </div>
-                        </div>
-                        <div class="text-sm text-gray-700">
-                        Kring New Fit office chair, mesh + PU, black
-                        </div>
-                        <div class="text-sm font-medium text-black">
-                        $200.00
-                        </div>
-                    </div>
-                </div>
-                {{ form_end(form) }}
-            </div>
+        <div class="bg-white overflow-auto rounded-lg shadow">
+            <table class="w-full">
+                <thead class=" border-b-2 border-gray-200">
+                    <tr>
+                        <th class="w-20 p-3 text-left">
+                            {{ form_widget(form.selectAll) }}
+                        </th>
+                        <th class="w-20 p-3 font-semibold tracking-wide text-left">Name</th>
+                        <th class="p-3 font-semibold tracking-wide text-left">Email</th>
+                        <th class="w-24 p-3 font-semibold tracking-wide text-left">Status</th>
+                        <th class="w-24 p-3 font-semibold tracking-wide text-left">Last seen</th>
+                        <th class="w-32 p-3 font-semibold tracking-wide text-left">Register Time</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for user in users %}
+                        <tr class=" {{user.status =='Active' ? 'text-gray-700' :'text-gray-500' }}">
+                            <td class="p-3 ">
+                                {{ form_widget(form.users[user.id], {'attr': {'class': 'item' }}) }}
+                            </td>
+                            <td class="p-3 text-sm  whitespace-nowrap">
+                                <a href="{{ path('app_user_show', {uuid:user.uuid}) }}" class="font-bold hover:underline {{user.status =='Active' ? '' :'line-through' }}">{{user.firstName}} {{user.lastName}}</a>
+                            </td>
+                            <td class="p-3 text-sm whitespace-nowrap">{{user.email}}</td>
+                            <td class="p-3 text-sm whitespace-nowrap">
+                                <span class="p-1.5 text-xs font-medium no-underline uppercase tracking-wider rounded-lg bg-opacity-50 {{user.status =='Active' ? 'text-green-800 bg-green-200' :'text-red-800 bg-red-200' }}" 
+                                >{{user.status}}</span>
+                            </td>
+                            <td class="p-3 inline-block text-sm whitespace-nowrap cursor-pointer ">
+                                <div class="relative flex items-center group">
+                                    {{user.loggedAt|ago}}
+                                    <div class="absolute left-0 items-center hidden ml-20 group-hover:flex">
+                                        <div class="w-3 h-3 -mr-2 rotate-45 bg-black"></div>
+                                        <span class="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black shadow-lg rounded-md">
+                                            {{user.loggedAt|format_datetime()}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{user.registerAt|format_datetime()}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
+        {{ form_end(form) }}
     </div>
 </div>
 {% endblock %}
